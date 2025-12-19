@@ -1,15 +1,1 @@
-#include <zephyr/dt-bindings/gpio/gpio.h>
-
-/ {
-    chosen {
-        zmk,keyboard = &kbd;
-    };
-};
-
-&gpio0 {
-    status = "okay";
-};
-
-kbd: kbd {
-    compatible = "zmk,keyboard";
-};
+/* empty dongle overlay - build sanity */
