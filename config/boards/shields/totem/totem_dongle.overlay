@@ -1,21 +1,42 @@
 /*
- * Copyright (c) 2022 The ZMK Contributors
- *
- * SPDX-License-Identifier: MIT
+ * Dongle screen overlay for XIAO BLE + ST7789
+ * Fixes:
+ *  - required porch-param
+ *  - missing st7789 label for /chosen
  */
 
-#include "totem.dtsi"
+#include <zephyr/dt-bindings/gpio/gpio.h>
 
 / {
     chosen {
-        zmk,kscan = &mock_kscan;
-        wakeup-source;
+        zephyr,display = &st7789;
     };
+};
 
-    mock_kscan: kscan_1 {
-        compatible = "zmk,kscan-mock";
-        columns = <0>;
-        rows = <0>;
-        events = <0>;
+&spi1 {
+    status = "okay";
+
+    st7789: st7789@0 {
+        compatible = "sitronix,st7789v";
+        reg = <0>;
+
+        spi-max-frequency = <8000000>;
+
+        label = "ST7789";
+
+        width = <240>;
+        height = <240>;
+        x-offset = <0>;
+        y-offset = <0>;
+
+        /* Required by sitronix,st7789v binding */
+        porch-param = <0 0 0 0 0 0>;
+
+        /* Typical ST7789 config */
+        madctl = <0x00>;
+        colmod = <0x55>;
+
+        reset-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+        dc-gpios    = <&gpio0 3 GPIO_ACTIVE_HIGH>;
     };
 };
