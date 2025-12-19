@@ -9,10 +9,6 @@ include:
     artifact-name: totem_shift_right
   - board: xiao_ble
     shield: totem_dongle dongle_screen
-    snippet: studio-rpc-usb-uart
-    cmake-args: -DCONFIG_LOG_PROCESS_THREAD_STARTUP_DELAY_MS=8000 -DCONFIG_ZMK_STUDIO=y
-    #cmake-args: -DCONFIG_LOG_PROCESS_THREAD_STARTUP_DELAY_MS=8000 #optional if logging is enabled
-    #snippet: zmk-usb-logging #only enable for debugging
     artifact-name: totem-dongle-screen
   - board: xiao_ble
     shield: settings_reset
