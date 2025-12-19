@@ -62,4 +62,14 @@
         gamma = <0x01>;
         colmod = <0x05>;
         lcm = <0x2c>;
-        porch = [0c 0
+        porch = [0C 0C 00 33 33];
+        gate = <0x35>;
+        pwctrl1 = [A4 A1];
+        pvgam = [D0 04 0D 11 13 2B 3F 54 4C 18 0D 0B 1F 23];
+        nvgam = [D0 04 0C 11 13 2C 3F 44 51 2F 1F 1F 20 23];
+        
+        label = "DISPLAY";
+        dc-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;   // Xiao D7
+        reset-gpios = <&gpio1 0 GPIO_ACTIVE_LOW>; // Xiao D6
+    };
+};
