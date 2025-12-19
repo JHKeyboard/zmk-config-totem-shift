@@ -9,7 +9,7 @@
 / {
     chosen {
         zmk,kscan = &mock_kscan;
-        wakeup-source;
+        zephyr,display = &st7789; // 에러 해결을 위한 디스플레이 지정
     };
 
     mock_kscan: kscan_1 {
@@ -17,5 +17,59 @@
         columns = <0>;
         rows = <0>;
         events = <0>;
+    };
+};
+
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,     // 핀 8 (SCK)
+                    <NRF_PSEL(SPIM_MOSI, 0, 2)>,    // 핀 10 (MOSI)
+                    <NRF_PSEL(SPIM_MISO, 0, 28)>;   // 미사용 (Xiao 기본값)
+        Group1;
+    };
+    spi0_sleep: spi0_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 2)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 28)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi0 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-1 = <&spi0_sleep>;
+    pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio0 29 GPIO_ACTIVE_LOW>; // 핀 9 (LCD_CS)
+
+    st7789: st7789@0 {
+        compatible = "sitronix,st7789v";
+        reg = <0>;
+        spi-max-frequency = <20000000>;
+        width = <172>; // 사용하는 화면의 실제 가로 해상도
+        height = <320>; // 사용하는 화면의 실제 세로 해상도
+        x-offset = <0>;
+        y-offset = <0>;
+        vcom = <0x19>;
+        gctrl = <0x35>;
+        vrhs = <0x12>;
+        vdvs = <0x20>;
+        mdac = <0x00>;
+        gamma = <0x01>;
+        colmod = <0x05>;
+        lcm = <0x2c>;
+        porch = [0c 0c 00 33 33];
+        gate = <0x35>;
+        pwctrl1 = [a4 a1];
+        pvgam = [d0 04 0d 11 13 2b 3f 54 4c 18 0d 0b 1f 23];
+        nvgam = [d0 04 0c 11 13 2c 3f 44 51 2f 1f 1f 20 23];
+        
+        // 배선도 기준 핀 할당
+        dc-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;  // 핀 7 (LCD_DC)
+        reset-gpios = <&gpio1 0 GPIO_ACTIVE_LOW>; // 핀 6 (LCD_RST)
     };
 };
