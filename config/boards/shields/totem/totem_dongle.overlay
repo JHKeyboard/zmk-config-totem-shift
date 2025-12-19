@@ -1,11 +1,12 @@
 /*
- * Dongle screen overlay for XIAO BLE + ST7789
- * Fixes:
- *  - required porch-param
- *  - missing st7789 label for /chosen
+ * Dongle screen overlay
+ * Board: Seeed XIAO BLE (nRF52840)
+ * Display: ST7789
+ * Zephyr >= 3.5 compatible
  */
 
 #include <zephyr/dt-bindings/gpio/gpio.h>
+#include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
 
 / {
     chosen {
@@ -13,15 +14,49 @@
     };
 };
 
+/* =========================
+ * SPI1 PINCTRL DEFINITIONS
+ * ========================= */
+
+&pinctrl {
+    spi1_default: spi1_default {
+        group1 {
+            psels = <
+                NRF_PSEL(SPIM_SCK,  0, 13)
+                NRF_PSEL(SPIM_MOSI, 0, 15)
+                NRF_PSEL(SPIM_MISO, 0, 14)
+            >;
+        };
+    };
+
+    spi1_sleep: spi1_sleep {
+        group1 {
+            psels = <
+                NRF_PSEL(SPIM_SCK,  0, 13)
+                NRF_PSEL(SPIM_MOSI, 0, 15)
+                NRF_PSEL(SPIM_MISO, 0, 14)
+            >;
+            low-power-enable;
+        };
+    };
+};
+
+/* =========================
+ * SPI1 BUS + ST7789 DISPLAY
+ * ========================= */
+
 &spi1 {
     status = "okay";
+
+    pinctrl-0 = <&spi1_default>;
+    pinctrl-1 = <&spi1_sleep>;
+    pinctrl-names = "default", "sleep";
 
     st7789: st7789@0 {
         compatible = "sitronix,st7789v";
         reg = <0>;
 
         spi-max-frequency = <8000000>;
-
         label = "ST7789";
 
         width = <240>;
@@ -29,14 +64,14 @@
         x-offset = <0>;
         y-offset = <0>;
 
-        /* Required by sitronix,st7789v binding */
+        /* Required by binding */
         porch-param = <0 0 0 0 0 0>;
 
-        /* Typical ST7789 config */
         madctl = <0x00>;
         colmod = <0x55>;
 
-        reset-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+        cs-gpios    = <&gpio0 1 GPIO_ACTIVE_LOW>;
         dc-gpios    = <&gpio0 3 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
     };
 };
