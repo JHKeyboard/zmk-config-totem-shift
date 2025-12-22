@@ -5,36 +5,49 @@
 };
 
 /* =========================
- * SPI for ST7789 Display
+ * PINCTRL
+ * ========================= */
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SCL, 0, 5)>,
+                    <NRF_PSEL(TWIM_SDA, 0, 4)>;
+            bias-pull-up;
+        };
+    };
+};
+
+/* =========================
+ * I2C (Sensor board)
+ * ========================= */
+&i2c0 {
+    status = "okay";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-names = "default";
+};
+
+/* =========================
+ * SPI (ST7789 Display)
  * ========================= */
 &spi1 {
     compatible = "nordic,nrf-spim";
     status = "okay";
-    sck-pin = <8>;     /* P8  : SCK  */
-    mosi-pin = <10>;   /* P10 : MOSI */
-    miso-pin = <255>;  /* not used */
+    sck-pin = <8>;
+    mosi-pin = <10>;
+    miso-pin = <255>;
 
     st7789: st7789@0 {
         compatible = "sitronix,st7789v";
         reg = <0>;
         spi-max-frequency = <8000000>;
 
-        cs-gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;   /* P7 */
-        dc-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;  /* P6 */
-        reset-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>; /* P3 */
+        cs-gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
+        dc-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
 
         width = <240>;
         height = <240>;
         rotation = <0>;
         status = "okay";
     };
-};
-
-/* =========================
- * I2C Sensor Board
- * ========================= */
-&i2c0 {
-    status = "okay";
-    scl-pin = <5>;  /* P5 */
-    sda-pin = <4>;  /* P4 */
 };
