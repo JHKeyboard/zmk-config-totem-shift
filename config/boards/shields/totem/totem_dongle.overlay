@@ -14,6 +14,14 @@
         zmk,physical-layout = &physical_layout0;
     };
 
+    /* 문제 해결: 백라이트를 드라이버 외부 노드로 분리 */
+    backlight: backlight {
+        compatible = "gpio-leds";
+        led_backlight: led_backlight {
+            gpios = <&xiao_d 6 GPIO_ACTIVE_HIGH>;
+        };
+    };
+
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         columns = <10>;
@@ -64,10 +72,9 @@
         ram-param = [00 f0];
         rgb-param = [cd 08 14];
         
-        /* dc-gpios 대신 최신 명칭인 cmd-data-gpios 사용 */
         cmd-data-gpios = <&xiao_d 3 GPIO_ACTIVE_LOW>;
         reset-gpios = <&xiao_d 2 GPIO_ACTIVE_LOW>;
-        backlight-gpios = <&xiao_d 6 GPIO_ACTIVE_HIGH>;
+        /* backlight-gpios는 여기서 삭제되었습니다 */
     };
 };
 
