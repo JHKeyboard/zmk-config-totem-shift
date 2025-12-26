@@ -47,7 +47,7 @@
         x-offset = <0>;
         y-offset = <0>;
         
-        /* Zephyr 3.5.0 ST7789 필수 속성 보정 */
+        /* 필수 속성값들 (바이트 배열 문법 수정) */
         vcom = <0x1e>;
         gctrl = <0x35>;
         vrhs = <0x12>;
@@ -57,9 +57,21 @@
         colmod = <0x05>;
         lcm = <0x2c>;
         
-        /* 에러 발생 지점: 최신 드라이버는 porch-param 형식을 요구함 */
+        /* 바이트 배열에서 쉼표(,)를 모두 제거했습니다 */
         porch-param = [0c 0c 00 33 33];
         cmd2en-param = [5a 69 02 01];
         pwctrl1-param = [a4 a1];
         pvgam-param = [d0 08 11 08 0c 15 39 33 50 3e 13 13 28 2f];
-        nvgam-param = [d0 08 10 08 06 06 39 4
+        nvgam-param = [d0 08 10 08 06 06 39 44 51 0b 16 14 2f 31];
+        ram-param = [00 f0];
+        rgb-param = [cd 08 14];
+        
+        dc-gpios = <&xiao_d 3 GPIO_ACTIVE_LOW>;
+        reset-gpios = <&xiao_d 2 GPIO_ACTIVE_LOW>;
+        backlight-gpios = <&xiao_d 6 GPIO_ACTIVE_HIGH>;
+    };
+};
+
+&physical_layout0 {
+    transform = <&default_transform>;
+};
