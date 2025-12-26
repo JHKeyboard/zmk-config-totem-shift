@@ -7,6 +7,12 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 #include "totem-layouts.dtsi"
 
+/ {
+   chosen {
+      zephyr,display = &st7789;
+  };
+};
+
 &physical_layout0 {
     transform = <&default_transform>;
     // zmk,kscan = &mock_kscan;
