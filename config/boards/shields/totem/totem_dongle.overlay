@@ -47,7 +47,6 @@
         x-offset = <0>;
         y-offset = <0>;
         
-        /* 필수 속성값들 (바이트 배열 문법 수정) */
         vcom = <0x1e>;
         gctrl = <0x35>;
         vrhs = <0x12>;
@@ -57,7 +56,6 @@
         colmod = <0x05>;
         lcm = <0x2c>;
         
-        /* 바이트 배열에서 쉼표(,)를 모두 제거했습니다 */
         porch-param = [0c 0c 00 33 33];
         cmd2en-param = [5a 69 02 01];
         pwctrl1-param = [a4 a1];
@@ -66,7 +64,8 @@
         ram-param = [00 f0];
         rgb-param = [cd 08 14];
         
-        dc-gpios = <&xiao_d 3 GPIO_ACTIVE_LOW>;
+        /* dc-gpios 대신 최신 명칭인 cmd-data-gpios 사용 */
+        cmd-data-gpios = <&xiao_d 3 GPIO_ACTIVE_LOW>;
         reset-gpios = <&xiao_d 2 GPIO_ACTIVE_LOW>;
         backlight-gpios = <&xiao_d 6 GPIO_ACTIVE_HIGH>;
     };
