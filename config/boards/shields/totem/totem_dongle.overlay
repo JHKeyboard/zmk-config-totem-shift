@@ -47,8 +47,19 @@
         x-offset = <0>;
         y-offset = <0>;
         
-        /* 추가된 필수 설정값 */
-        vcom = <0>; 
+        /* Zephyr 3.5.0 ST7789 필수 속성들 */
+        vcom = <0x1e>;
+        gctrl = <0x35>;
+        vrhs = <0x12>;
+        vdvs = <0x20>;
+        mdac = <0x00>;
+        gamma = <0x01>;
+        colmod = <0x05>;
+        lcm = <0x2c>;
+        porch-front = [0c 0c 00 33 33];
+        porch-back = [0c 0c 00 33 33];
+        gate-ctrl = [35 00 00];
+        pw-ctrl-1 = [a4 a1];
         
         dc-gpios = <&xiao_d 3 GPIO_ACTIVE_LOW>;
         reset-gpios = <&xiao_d 2 GPIO_ACTIVE_LOW>;
